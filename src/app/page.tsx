@@ -1,21 +1,22 @@
 "use client";
 
-import { BookList } from "@/components/BookList";
+import { BookList } from "@/components/BookComponents/BookList";
 import { SearchInput } from "@/components/searchInput";
+import { responseBookListType, searchBooks } from "@/utils/googleBooksAPI";
 import { useState } from "react";
 
 const HomePage: React.FC = () => {
   const [openList, setOpenList] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [bookList, setBookList] = useState<[]>([]);
+  const [bookList, setBookList] = useState<responseBookListType[]>([]);
 
   const handleSearch = async (bookName: string) => {
     setOpenList(true);
     setIsLoading(true);
-    // const res = await searchBooks("react");
-    setBookList([]);
+    const books = await searchBooks(bookName);
 
-    alert(bookName);
+    setBookList(books);
+
     setIsLoading(false);
   };
 
