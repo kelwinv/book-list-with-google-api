@@ -1,8 +1,14 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Roboto } from "next/font/google";
+import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({
+  weight: ["400", "700"],
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-roboto",
+});
 
 export const metadata: Metadata = {
   title: "Pesquisador de livros",
@@ -16,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>{children}</body>
+      <Providers>
+        <body className={roboto.variable}>{children}</body>
+      </Providers>
     </html>
   );
 }
