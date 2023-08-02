@@ -22,9 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <Providers>
-        <body className={roboto.variable}>{children}</body>
-      </Providers>
+      <body className={roboto.variable}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
