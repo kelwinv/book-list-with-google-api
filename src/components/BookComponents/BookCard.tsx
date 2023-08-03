@@ -1,57 +1,104 @@
-import { Badge, Box, Heading, Text } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Heading,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import Image from "next/image";
+import NextLink from "next/link";
 
 type BookCardType = {
   id: string;
-  listPrice?: { amount: number; currencyCode: string };
+  price?: { amount: number; currencyCode: string };
   volumeInfo: {
-    authors: string[];
+    authors?: string[];
     categories: string[];
     imageUrl: string;
     title: string;
-    subtitle: string;
+    subtitle?: string;
   };
 };
 
-const BookCard: React.FC<BookCardType> = ({ id, listPrice, volumeInfo }) => {
+const BookCard: React.FC<BookCardType> = ({ id, price, volumeInfo }) => {
   const imageLoader = () => {
     return volumeInfo.imageUrl;
   };
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
-      <Image
-        loader={imageLoader}
-        src={"book-loading.jpg"}
-        alt={volumeInfo.title}
-        height={200}
-        width={200}
-        objectFit="cover"
-      />
-      <Heading as="h3" fontSize="lg" mt={2}>
-        {volumeInfo.title}
-      </Heading>
-      {volumeInfo.subtitle && (
-        <Text fontSize="md" color="gray.600" fontStyle="italic">
-          {volumeInfo.subtitle}
-        </Text>
-      )}
-      <Text fontSize="md" mt={2}>
-        {volumeInfo.authors.join(", ")}
-      </Text>
-      <Box mt={2}>
-        {volumeInfo.categories?.map((category) => (
-          <Badge key={category} colorScheme="teal" mr={2}>
-            {category}
-          </Badge>
-        ))}
-      </Box>
-      {listPrice && (
-        <Text mt={2}>
-          Price: {listPrice.amount} {listPrice.currencyCode}
-        </Text>
-      )}
-    </Box>
+    <Card
+      overflow="hidden"
+      direction={{ base: "column", sm: "row" }}
+      className="flex w-full max-w-lg  gap-2 rounded-md shadow-md"
+    >
+      <div className="flex h-full w-full max-w-[12rem] overflow-hidden rounded-md">
+        <Image
+          loader={imageLoader}
+          src={"book-loading.jpg"}
+          alt={volumeInfo.title}
+          height={128}
+          width={100}
+          objectPosition="start"
+          className="w-full object-cover"
+        />
+      </div>
+      <Stack className="flex flex-1 flex-col justify-between gap-4 ">
+        <CardBody>
+          <Heading as="h3" fontSize="lg">
+            {volumeInfo.title}
+          </Heading>
+          {volumeInfo.subtitle && (
+            <Text
+              fontSize="md"
+              color="gray.600"
+              fontStyle="italic"
+              className="max-w-[18rem] flex-wrap truncate"
+            >
+              {volumeInfo.subtitle}
+            </Text>
+          )}
+          {volumeInfo?.authors && (
+            <Text
+              fontSize="md"
+              color="gray.600"
+              fontStyle="italic"
+              className="max-w-[18rem] flex-nowrap truncate"
+            >
+              <strong>Autores:</strong> {" " + volumeInfo.authors.join(" | ")}
+            </Text>
+          )}
+        </CardBody>
+
+        <CardFooter className="flex flex-col gap-2 pb-1">
+          <Box className="flex items-end justify-between">
+            {price && (
+              <Text color="teal">
+                <strong className="text-black">Price: </strong>
+                {price.amount} {price.currencyCode}
+              </Text>
+            )}
+            <NextLink href={`/book-details/${id}`} className="underline">
+              Ver detalhes
+            </NextLink>
+          </Box>
+          <Box className="flex  gap-2">
+            {volumeInfo.categories?.map((category) => (
+              <Badge
+                key={category}
+                colorScheme="teal"
+                className="rounded-full p-1"
+              >
+                {category}
+              </Badge>
+            ))}
+          </Box>
+        </CardFooter>
+      </Stack>
+    </Card>
   );
 };
 

@@ -15,7 +15,7 @@ export type responseBookListType = {
     listPrice?: { amount: number; currencyCode: string };
   };
   volumeInfo: {
-    authors: string[];
+    authors?: string[];
     categories?: string[];
     imageLinks: {
       thumbnail: string;
@@ -23,7 +23,7 @@ export type responseBookListType = {
     };
     language: string;
     title: string;
-    subtitle: string;
+    subtitle?: string;
   };
 };
 
