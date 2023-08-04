@@ -4,13 +4,14 @@ import { BookList } from "@/components/BookComponents/BookList";
 import { FooterBar } from "@/components/FooterBar";
 import { Header } from "@/components/Header";
 import { SearchInput } from "@/components/searchInput";
-import { responseBookListType, searchBooks } from "@/utils/googleBooksAPI";
+import { useBookContext } from "@/context/BookListContext";
+import { searchBooks } from "@/utils/googleBooksAPI";
 import { useState } from "react";
 
 const HomePage: React.FC = () => {
-  const [openList, setOpenList] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [bookList, setBookList] = useState<responseBookListType[]>([]);
+
+  const { setBookList, bookList } = useBookContext();
 
   const handleSearch = async (bookName: string) => {
     setIsLoading(true);
@@ -19,7 +20,6 @@ const HomePage: React.FC = () => {
 
     setBookList(books);
 
-    setOpenList(true);
     setIsLoading(false);
   };
 
@@ -28,7 +28,7 @@ const HomePage: React.FC = () => {
       <Header />
       <main className="flex max-h-[calc(100vh-5rem-6rem)] flex-1 flex-col justify-center gap-8 delay-300 ease-linear">
         <SearchInput onSearch={handleSearch} isLoading={isLoading} />
-        {openList && <BookList bookList={bookList} />}
+        {bookList.length > 0 && <BookList />}
       </main>
       <FooterBar />
     </div>
