@@ -46,3 +46,18 @@ export const searchBooks = async (
     return [];
   }
 };
+
+export const getBookDetails = async <T>(id: string): Promise<T | undefined> => {
+  try {
+    const response = await googleBooksApi.get<T>(`/volumes/${id}`, {});
+
+    if (response.data) {
+      return response.data;
+    }
+
+    return undefined;
+  } catch (error) {
+    console.error("Error get book details:", error);
+    return undefined;
+  }
+};
