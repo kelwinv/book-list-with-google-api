@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import NextLink from "next/link";
+import { Ref } from "react";
 
 type BookCardType = {
   id: string;
@@ -18,34 +19,50 @@ type BookCardType = {
   volumeInfo: {
     authors?: string[];
     categories: string[];
-    imageUrl: string;
+    imageLinks: string[];
     title: string;
     subtitle?: string;
   };
+  isSelected: boolean;
+  onBookClick: () => void;
+  innerRef?: Ref<HTMLDivElement>;
 };
 
-const BookCard: React.FC<BookCardType> = ({ id, price, volumeInfo }) => {
+const BookCard: React.FC<BookCardType> = ({
+  id,
+  price,
+  volumeInfo,
+  isSelected,
+  onBookClick,
+  innerRef,
+}) => {
   const imageLoader = () => {
-    return volumeInfo.imageUrl;
+    return Object.values(volumeInfo.imageLinks)[0];
   };
 
   return (
     <Card
+      ref={innerRef}
       overflow="hidden"
       direction={{ base: "column", sm: "row" }}
-      className="flex w-full max-w-lg  gap-2 rounded-md shadow-md"
+      className={`flex w-full max-w-lg gap-2 rounded-md shadow-md ${
+        isSelected ? "border-4 border-blue-500" : ""
+      }`}
+      onClick={onBookClick}
     >
-      <div className="flex h-full w-full max-w-[12rem] overflow-hidden rounded-md">
-        <Image
-          loader={imageLoader}
-          src={"book-loading.jpg"}
-          alt={volumeInfo.title}
-          height={128}
-          width={100}
-          objectPosition="start"
-          className="w-full object-cover"
-        />
-      </div>
+      {volumeInfo.imageLinks.length > 0 && (
+        <div className="flex h-full w-full max-w-[12rem] overflow-hidden rounded-md">
+          <Image
+            loader={imageLoader}
+            src={"book-loading.jpg"}
+            alt={volumeInfo.title}
+            height={128}
+            width={100}
+            objectPosition="start"
+            className="w-full object-cover"
+          />
+        </div>
+      )}
       <Stack className="flex flex-1 flex-col justify-between gap-4 ">
         <CardBody>
           <Heading as="h3" fontSize="lg">

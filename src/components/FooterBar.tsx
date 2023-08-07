@@ -11,7 +11,7 @@ const FooterBar = () => {
           Kelwin vieira
         </a>
         <a
-          href="https://github.com/kelwinv/company-handle-frontend"
+          href="https://github.com/kelwinv/book-list-with-google-api"
           target="_blank"
           className="underline"
         >

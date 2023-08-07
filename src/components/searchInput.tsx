@@ -1,29 +1,41 @@
+"use client";
+
+import { useBookContext } from "@/context/BookListContext";
 import {
   InputGroup,
   InputRightElement,
   Input,
   Button,
-  Text,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
-type SearchInput = {
-  onSearch: (bookName: string) => void;
-  isLoading: boolean;
-};
+const SearchInput: React.FC = () => {
+  const { isLoading, handleSearch, accSearchText } = useBookContext();
 
-const SearchInput: React.FC<SearchInput> = ({ onSearch, isLoading }) => {
   const [openButtonText, setOpenButtonText] = useState(true);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(accSearchText);
   const [isValueEmpty, setIsValueEmpty] = useState(false);
+  const [notFoundBook, setNotFoundBook] = useState(false);
 
-  const handleSearch = () => {
+  const bookSearchNotFound = () => {
+    setNotFoundBook(true);
+  };
+
+  const onSearch = () => {
     if (!searchText) {
       setIsValueEmpty(true);
       return;
     }
-    onSearch(searchText);
+    handleSearch(searchText, bookSearchNotFound);
+  };
+
+  const onChangeInput = (value: string) => {
+    setSearchText(value);
+    setIsValueEmpty(false);
+    setNotFoundBook(false);
   };
 
   return (
@@ -36,18 +48,16 @@ const SearchInput: React.FC<SearchInput> = ({ onSearch, isLoading }) => {
           isInvalid={isValueEmpty}
           placeholder="Pesquise seu livro"
           variant="flushed"
+          type="search"
           size="lg"
           value={searchText}
           _placeholder={{
             opacity: 0.4,
             color: isValueEmpty ? "tomato" : "inherit",
           }}
-          onChange={(e) => {
-            setSearchText(e.target.value);
-            setIsValueEmpty(false);
-          }}
+          onChange={(e) => onChangeInput(e.target.value)}
           onKeyDown={({ key }) => {
-            if (key === "Enter" && !isLoading) handleSearch();
+            if (key === "Enter" && !isLoading) onSearch();
           }}
           className={openButtonText ? "pr-32" : "pr-10"}
         />
@@ -63,7 +73,7 @@ const SearchInput: React.FC<SearchInput> = ({ onSearch, isLoading }) => {
             leftIcon={<AiOutlineSearch className="translate-x-1" />}
             colorScheme="blue"
             className="h-full"
-            onClick={handleSearch}
+            onClick={onSearch}
           >
             <p
               className={`${
@@ -76,9 +86,14 @@ const SearchInput: React.FC<SearchInput> = ({ onSearch, isLoading }) => {
         </InputRightElement>
       </InputGroup>
       {isValueEmpty && (
-        <Text fontSize="sm" color="tomato" className="mt-2">
-          O valor não pode ser vazio
-        </Text>
+        <Alert fontSize="sm" status="error" className="mt-2">
+          <AlertIcon />O valor não pode ser vazio
+        </Alert>
+      )}
+      {notFoundBook && (
+        <Alert fontSize="sm" status="info" className="mt-2">
+          <AlertIcon />o livro não foi encontrado
+        </Alert>
       )}
     </div>
   );

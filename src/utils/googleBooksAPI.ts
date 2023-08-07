@@ -29,11 +29,14 @@ export type responseBookListType = {
 
 export const searchBooks = async (
   query: string,
+  startIndex: number = 0,
 ): Promise<responseBookListType[]> => {
   try {
     const response = await googleBooksApi.get("/volumes", {
       params: {
         q: query,
+        startIndex,
+        orderBy: "relevance",
       },
     });
     if (response.data.items) {
@@ -44,5 +47,20 @@ export const searchBooks = async (
   } catch (error) {
     console.error("Error searching books:", error);
     return [];
+  }
+};
+
+export const getBookDetails = async <T>(id: string): Promise<T | undefined> => {
+  try {
+    const response = await googleBooksApi.get<T>(`/volumes/${id}`, {});
+
+    if (response.data) {
+      return response.data;
+    }
+
+    return undefined;
+  } catch (error) {
+    console.error("Error get book details:", error);
+    return undefined;
   }
 };
