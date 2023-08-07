@@ -37,7 +37,14 @@ const BookCard: React.FC<BookCardType> = ({
   innerRef,
 }) => {
   const imageLoader = () => {
-    return Object.values(volumeInfo.imageLinks)[0];
+    const imageLink = Object.values(volumeInfo.imageLinks)[0];
+
+    if (imageLink.startsWith("http://")) {
+      const secureImageLink = imageLink.replace("http://", "https://");
+      return secureImageLink;
+    } else {
+      return imageLink;
+    }
   };
 
   return (
