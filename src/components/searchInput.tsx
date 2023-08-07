@@ -32,6 +32,12 @@ const SearchInput: React.FC = () => {
     handleSearch(searchText, bookSearchNotFound);
   };
 
+  const onChangeInput = (value: string) => {
+    setSearchText(value);
+    setIsValueEmpty(false);
+    setNotFoundBook(false);
+  };
+
   return (
     <div className="mx-auto w-full max-w-[min(40rem,90vw)]">
       <InputGroup
@@ -48,10 +54,7 @@ const SearchInput: React.FC = () => {
             opacity: 0.4,
             color: isValueEmpty ? "tomato" : "inherit",
           }}
-          onChange={(e) => {
-            setSearchText(e.target.value);
-            setIsValueEmpty(false);
-          }}
+          onChange={(e) => onChangeInput(e.target.value)}
           onKeyDown={({ key }) => {
             if (key === "Enter" && !isLoading) onSearch();
           }}
