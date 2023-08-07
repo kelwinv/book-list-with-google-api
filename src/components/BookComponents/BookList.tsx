@@ -22,6 +22,8 @@ const BookList: React.FC = () => {
     }
   }, [selectedBookId]);
 
+  if (bookList.length <= 0) return <></>;
+
   return (
     <Container className="flex w-full max-w-[min(75rem,90vw)] flex-wrap justify-between gap-8 overflow-y-scroll py-8 max-2xl:justify-center">
       {bookList.map(({ id, saleInfo, volumeInfo }) => (

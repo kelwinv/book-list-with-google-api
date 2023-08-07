@@ -1,3 +1,6 @@
+"use client";
+
+import { useBookContext } from "@/context/BookListContext";
 import {
   InputGroup,
   InputRightElement,
@@ -8,22 +11,19 @@ import {
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
-type SearchInput = {
-  onSearch: (bookName: string) => void;
-  isLoading: boolean;
-};
+const SearchInput: React.FC = () => {
+  const { isLoading, handleSearch } = useBookContext();
 
-const SearchInput: React.FC<SearchInput> = ({ onSearch, isLoading }) => {
   const [openButtonText, setOpenButtonText] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [isValueEmpty, setIsValueEmpty] = useState(false);
 
-  const handleSearch = () => {
+  const onSearch = () => {
     if (!searchText) {
       setIsValueEmpty(true);
       return;
     }
-    onSearch(searchText);
+    handleSearch(searchText);
   };
 
   return (
@@ -47,7 +47,7 @@ const SearchInput: React.FC<SearchInput> = ({ onSearch, isLoading }) => {
             setIsValueEmpty(false);
           }}
           onKeyDown={({ key }) => {
-            if (key === "Enter" && !isLoading) handleSearch();
+            if (key === "Enter" && !isLoading) onSearch();
           }}
           className={openButtonText ? "pr-32" : "pr-10"}
         />
@@ -63,7 +63,7 @@ const SearchInput: React.FC<SearchInput> = ({ onSearch, isLoading }) => {
             leftIcon={<AiOutlineSearch className="translate-x-1" />}
             colorScheme="blue"
             className="h-full"
-            onClick={handleSearch}
+            onClick={onSearch}
           >
             <p
               className={`${
