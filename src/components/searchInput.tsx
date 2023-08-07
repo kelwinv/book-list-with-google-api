@@ -13,10 +13,10 @@ import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const SearchInput: React.FC = () => {
-  const { isLoading, handleSearch } = useBookContext();
+  const { isLoading, handleSearch, accSearchText } = useBookContext();
 
   const [openButtonText, setOpenButtonText] = useState(true);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(accSearchText);
   const [isValueEmpty, setIsValueEmpty] = useState(false);
   const [notFoundBook, setNotFoundBook] = useState(false);
 
@@ -48,6 +48,7 @@ const SearchInput: React.FC = () => {
           isInvalid={isValueEmpty}
           placeholder="Pesquise seu livro"
           variant="flushed"
+          type="search"
           size="lg"
           value={searchText}
           _placeholder={{
