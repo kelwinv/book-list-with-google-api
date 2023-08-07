@@ -72,7 +72,14 @@ export default function BookDetails({ params }: BookDetailsType) {
   if (!bookDetails) return <p>Livro não encontrado</p>;
 
   const imageLoader = () => {
-    return Object.values(bookDetails.volumeInfo.imageLinks || [])[0];
+    const imageLink = Object.values(bookDetails.volumeInfo.imageLinks || [])[0];
+
+    if (imageLink.startsWith("http://")) {
+      const secureImageLink = imageLink.replace("http://", "https://");
+      return secureImageLink;
+    } else {
+      return imageLink;
+    }
   };
 
   return (
