@@ -6,7 +6,8 @@ import {
   InputRightElement,
   Input,
   Button,
-  Text,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -17,13 +18,18 @@ const SearchInput: React.FC = () => {
   const [openButtonText, setOpenButtonText] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [isValueEmpty, setIsValueEmpty] = useState(false);
+  const [notFoundBook, setNotFoundBook] = useState(false);
+
+  const bookSearchNotFound = () => {
+    setNotFoundBook(true);
+  };
 
   const onSearch = () => {
     if (!searchText) {
       setIsValueEmpty(true);
       return;
     }
-    handleSearch(searchText);
+    handleSearch(searchText, bookSearchNotFound);
   };
 
   return (
@@ -76,9 +82,14 @@ const SearchInput: React.FC = () => {
         </InputRightElement>
       </InputGroup>
       {isValueEmpty && (
-        <Text fontSize="sm" color="tomato" className="mt-2">
-          O valor não pode ser vazio
-        </Text>
+        <Alert fontSize="sm" status="error" className="mt-2">
+          <AlertIcon />O valor não pode ser vazio
+        </Alert>
+      )}
+      {notFoundBook && (
+        <Alert fontSize="sm" status="info" className="mt-2">
+          <AlertIcon />o livro não foi encontrado
+        </Alert>
       )}
     </div>
   );
