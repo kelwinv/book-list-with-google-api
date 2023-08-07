@@ -38,7 +38,7 @@ type bookType = {
     averageRating: number;
     ratingsCount: number;
     contentVersion: string;
-    imageLinks: ImageLinks;
+    imageLinks?: ImageLinks;
     language: string;
     mainCategory: string;
     previewLink: string;
@@ -56,8 +56,8 @@ export default function BookDetails({ params }: BookDetailsType) {
       try {
         const book = await getBookDetails<bookType>(id);
         setBookDetails(book);
-      } catch (error) {
-        console.error(error?.message);
+      } catch (error: unknown) {
+        console.error(error);
       }
     },
     [setBookDetails],
@@ -72,7 +72,7 @@ export default function BookDetails({ params }: BookDetailsType) {
   if (!bookDetails) return <p>Livro não encontrado</p>;
 
   const imageLoader = () => {
-    return Object.values(bookDetails.volumeInfo.imageLinks)[0];
+    return Object.values(bookDetails.volumeInfo.imageLinks || [])[0];
   };
 
   return (
@@ -87,16 +87,18 @@ export default function BookDetails({ params }: BookDetailsType) {
             <p className="mb-2 text-lg">{bookDetails.volumeInfo.subtitle}</p>
             <p>Data de Publicação: {bookDetails.volumeInfo.publishedDate}</p>
           </header>
-          <div className="flex">
-            <Image
-              loader={imageLoader}
-              src={"book-loading.jpg"}
-              alt="Miniatura do Livro"
-              className="ml-auto mt-2 h-auto max-w-full"
-              height={128}
-              width={100}
-            />
-          </div>
+          {bookDetails.volumeInfo.imageLinks && (
+            <div className="flex">
+              <Image
+                loader={imageLoader}
+                src={"book-loading.jpg"}
+                alt="Miniatura do Livro"
+                className="ml-auto mt-2 h-auto max-w-full"
+                height={128}
+                width={100}
+              />
+            </div>
+          )}
           <div className="p-4">
             <p>
               <strong>Autor(es):</strong>{" "}

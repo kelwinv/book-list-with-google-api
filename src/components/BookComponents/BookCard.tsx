@@ -19,7 +19,7 @@ type BookCardType = {
   volumeInfo: {
     authors?: string[];
     categories: string[];
-    imageUrl: string;
+    imageLinks: string[];
     title: string;
     subtitle?: string;
   };
@@ -37,7 +37,7 @@ const BookCard: React.FC<BookCardType> = ({
   innerRef,
 }) => {
   const imageLoader = () => {
-    return volumeInfo.imageUrl;
+    return Object.values(volumeInfo.imageLinks)[0];
   };
 
   return (
@@ -50,17 +50,19 @@ const BookCard: React.FC<BookCardType> = ({
       }`}
       onClick={onBookClick}
     >
-      <div className="flex h-full w-full max-w-[12rem] overflow-hidden rounded-md">
-        <Image
-          loader={imageLoader}
-          src={"book-loading.jpg"}
-          alt={volumeInfo.title}
-          height={128}
-          width={100}
-          objectPosition="start"
-          className="w-full object-cover"
-        />
-      </div>
+      {volumeInfo.imageLinks.length > 0 && (
+        <div className="flex h-full w-full max-w-[12rem] overflow-hidden rounded-md">
+          <Image
+            loader={imageLoader}
+            src={"book-loading.jpg"}
+            alt={volumeInfo.title}
+            height={128}
+            width={100}
+            objectPosition="start"
+            className="w-full object-cover"
+          />
+        </div>
+      )}
       <Stack className="flex flex-1 flex-col justify-between gap-4 ">
         <CardBody>
           <Heading as="h3" fontSize="lg">

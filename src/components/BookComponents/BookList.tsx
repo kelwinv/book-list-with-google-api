@@ -1,6 +1,5 @@
 "use client";
 
-import { responseBookListType } from "@/utils/googleBooksAPI";
 import { Container } from "@chakra-ui/react";
 import { BookCard } from "./BookCard";
 import { useEffect, useRef } from "react";
@@ -34,9 +33,7 @@ const BookList: React.FC = () => {
           volumeInfo={{
             authors: volumeInfo.authors,
             categories: volumeInfo.categories || [],
-            imageUrl:
-              volumeInfo.imageLinks["smallThumbnail"] ||
-              volumeInfo.imageLinks["thumbnail"],
+            imageLinks: Object.values(volumeInfo.imageLinks || []),
             subtitle: volumeInfo.subtitle,
             title: volumeInfo.title,
           }}
